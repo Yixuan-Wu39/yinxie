@@ -14,5 +14,6 @@ samples/*.jpeg
 samples/*.bmp
 !samples/.gitkeep
 *-stego.bmp
+*-stego.wav
 *.pdf
 *.docx

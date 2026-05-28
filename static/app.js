@@ -5,6 +5,12 @@ const state = {
   outputUrl: "",
   extractFile: null,
   extractImageBase64: "",
+  audioFile: null,
+  audioBase64: "",
+  wav: null,
+  audioOutputUrl: "",
+  audioExtractFile: null,
+  audioExtractBase64: "",
 };
 
 const els = {
@@ -19,6 +25,16 @@ const els = {
   extractImage: document.querySelector("#extract-image"),
   extractButton: document.querySelector("#extract-button"),
   extractResult: document.querySelector("#extract-result"),
+  audioFile: document.querySelector("#audio-file"),
+  audioReport: document.querySelector("#audio-report"),
+  audioSecretText: document.querySelector("#audio-secret-text"),
+  audioTextCounter: document.querySelector("#audio-text-counter"),
+  audioHideButton: document.querySelector("#audio-hide-button"),
+  audioOutputReport: document.querySelector("#audio-output-report"),
+  audioDownloadLink: document.querySelector("#audio-download-link"),
+  audioExtractFile: document.querySelector("#audio-extract-file"),
+  audioExtractButton: document.querySelector("#audio-extract-button"),
+  audioExtractResult: document.querySelector("#audio-extract-result"),
 };
 
 const encoder = new TextEncoder();
@@ -115,6 +131,96 @@ els.extractButton.addEventListener("click", async () => {
   }
 });
 
+els.audioFile.addEventListener("change", async (event) => {
+  resetAudioOutput();
+  const file = event.target.files?.[0];
+  state.audioFile = file || null;
+  state.wav = null;
+  state.audioBase64 = "";
+
+  if (!file) {
+    els.audioReport.textContent = "还没有选择音频。";
+    updateAudioTextCounter();
+    return;
+  }
+
+  try {
+    state.audioBase64 = await fileToBase64(file);
+    const result = await postJson("/api/audio/analyze", {
+      filename: file.name,
+      audioBase64: state.audioBase64,
+    });
+    state.wav = result.wav;
+    els.audioReport.textContent = formatWavReport(result.wav);
+  } catch (error) {
+    els.audioReport.innerHTML = `<span class="warning">${escapeHtml(error.message)}</span>`;
+  }
+
+  updateAudioTextCounter();
+});
+
+els.audioSecretText.addEventListener("input", updateAudioTextCounter);
+
+els.audioHideButton.addEventListener("click", async () => {
+  if (!state.audioFile || !state.audioBase64) return;
+  resetAudioOutput();
+  els.audioHideButton.disabled = true;
+  els.audioOutputReport.textContent = "正在处理音频...";
+
+  try {
+    const result = await postJson("/api/audio/hide", {
+      filename: state.audioFile.name,
+      audioBase64: state.audioBase64,
+      text: els.audioSecretText.value,
+    });
+    const blob = base64ToBlob(result.audioBase64, "audio/wav");
+    state.audioOutputUrl = URL.createObjectURL(blob);
+    els.audioDownloadLink.href = state.audioOutputUrl;
+    els.audioDownloadLink.download = result.filename;
+    els.audioDownloadLink.classList.remove("hidden");
+    els.audioOutputReport.textContent = `处理完成。\n写入文本：${result.textBytes} 字节\n输出文件：${result.filename}`;
+  } catch (error) {
+    els.audioOutputReport.innerHTML = `<span class="warning">${escapeHtml(error.message)}</span>`;
+  } finally {
+    updateAudioTextCounter();
+  }
+});
+
+els.audioExtractFile.addEventListener("change", async (event) => {
+  const file = event.target.files?.[0];
+  state.audioExtractFile = file || null;
+  state.audioExtractBase64 = "";
+  els.audioExtractResult.textContent = "还没有提取结果。";
+  els.audioExtractButton.disabled = true;
+
+  if (!file) return;
+
+  try {
+    state.audioExtractBase64 = await fileToBase64(file);
+    els.audioExtractButton.disabled = false;
+  } catch (error) {
+    els.audioExtractResult.textContent = error.message;
+  }
+});
+
+els.audioExtractButton.addEventListener("click", async () => {
+  if (!state.audioExtractBase64) return;
+  els.audioExtractButton.disabled = true;
+  els.audioExtractResult.textContent = "正在提取...";
+
+  try {
+    const result = await postJson("/api/audio/extract", {
+      filename: state.audioExtractFile?.name || "",
+      audioBase64: state.audioExtractBase64,
+    });
+    els.audioExtractResult.textContent = result.text || "(隐藏文本为空)";
+  } catch (error) {
+    els.audioExtractResult.textContent = error.message;
+  } finally {
+    els.audioExtractButton.disabled = false;
+  }
+});
+
 async function checkServer() {
   try {
     const response = await fetch("/api/health");
@@ -144,12 +250,37 @@ function updateTextCounter() {
   els.hideButton.disabled = !fits;
 }
 
+function updateAudioTextCounter() {
+  const bytes = encoder.encode(els.audioSecretText.value).length;
+  const limit = state.wav?.max_text_bytes ?? 0;
+  const hasAudio = Boolean(state.audioFile && state.audioBase64 && state.wav);
+  const fits = hasAudio && bytes <= limit;
+
+  if (!hasAudio) {
+    els.audioTextCounter.textContent = `${bytes} 字节；请先选择可用 WAV 音频`;
+    els.audioHideButton.disabled = true;
+    return;
+  }
+
+  els.audioTextCounter.textContent = `${bytes} / ${limit} 字节`;
+  els.audioTextCounter.classList.toggle("warning", !fits);
+  els.audioHideButton.disabled = !fits;
+}
+
 function resetOutput() {
   if (state.outputUrl) URL.revokeObjectURL(state.outputUrl);
   state.outputUrl = "";
   els.downloadLink.removeAttribute("href");
   els.downloadLink.classList.add("hidden");
   els.outputReport.textContent = "处理完成后会在这里出现下载按钮。";
+}
+
+function resetAudioOutput() {
+  if (state.audioOutputUrl) URL.revokeObjectURL(state.audioOutputUrl);
+  state.audioOutputUrl = "";
+  els.audioDownloadLink.removeAttribute("href");
+  els.audioDownloadLink.classList.add("hidden");
+  els.audioOutputReport.textContent = "处理完成后会在这里出现下载按钮。";
 }
 
 function formatBmpReport(bmp) {
@@ -160,6 +291,20 @@ function formatBmpReport(bmp) {
     `可写像素数据：${bmp.pixel_byte_count} 字节`,
     `理论隐写容量：${bmp.capacity_bytes} 字节`,
     `当前文本上限：${bmp.max_text_bytes} 字节`,
+  ].join("\n");
+}
+
+function formatWavReport(wav) {
+  return [
+    "识别成功：PCM WAV",
+    `声道数：${wav.channels}`,
+    `采样率：${wav.sample_rate} Hz`,
+    `位深：${wav.bits_per_sample} bit`,
+    `时长：${wav.duration_seconds} 秒`,
+    `音频数据区：${wav.data_byte_count} 字节`,
+    `可用采样槽：${wav.sample_slot_count}`,
+    `理论隐写容量：${wav.capacity_bytes} 字节`,
+    `当前文本上限：${wav.max_text_bytes} 字节`,
   ].join("\n");
 }
 

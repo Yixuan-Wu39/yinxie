@@ -49,6 +49,40 @@
         <button id="extract-button" type="button" disabled>提取隐藏文本</button>
         <pre id="extract-result" class="result-box">还没有提取结果。</pre>
       </section>
+
+      <section class="panel">
+        <h2>5. 音频隐写：输入 WAV 并识别容量</h2>
+        <label class="file-zone">
+          <input id="audio-file" type="file" accept=".wav,audio/wav,audio/x-wav" />
+          <span>选择一段 PCM WAV 音频</span>
+        </label>
+        <div id="audio-report" class="report muted">还没有选择音频。</div>
+      </section>
+
+      <section class="panel">
+        <h2>6. 输入要隐藏到音频里的文本</h2>
+        <textarea id="audio-secret-text" rows="6" placeholder="在这里输入要藏进 WAV 音频里的文本"></textarea>
+        <div class="row">
+          <span id="audio-text-counter" class="muted">0 字节</span>
+          <button id="audio-hide-button" type="button" disabled>处理音频</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>7. 音频输出</h2>
+        <div id="audio-output-report" class="report muted">处理完成后会在这里出现下载按钮。</div>
+        <a id="audio-download-link" class="button-link hidden" download>下载隐写 WAV</a>
+      </section>
+
+      <section class="panel">
+        <h2>8. 验证音频提取</h2>
+        <label class="file-zone">
+          <input id="audio-extract-file" type="file" accept=".wav,audio/wav,audio/x-wav" />
+          <span>选择一段已经处理过的 WAV 音频</span>
+        </label>
+        <button id="audio-extract-button" type="button" disabled>提取隐藏文本</button>
+        <pre id="audio-extract-result" class="result-box">还没有提取结果。</pre>
+      </section>
     </main>
 
     <script src="/static/app.js"></script>

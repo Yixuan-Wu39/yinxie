@@ -9,8 +9,19 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from .bmp_adapter import BmpError, extract_text, hide_text, inspect_bmp
+from .bmp_adapter import (
+    BmpError,
+    extract_text as extract_bmp_text,
+    hide_text as hide_bmp_text,
+    inspect_bmp,
+)
 from .stego_core import StegoError
+from .wav_adapter import (
+    WavError,
+    extract_text as extract_wav_text,
+    hide_text as hide_wav_text,
+    inspect_wav,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,7 +67,7 @@ class AppHandler(BaseHTTPRequestHandler):
                 if not isinstance(text, str):
                     raise ValueError("text must be a string")
                 text_bytes = text.encode("utf-8")
-                modified, info = hide_text(image, text_bytes)
+                modified, info = hide_bmp_text(image, text_bytes)
                 self._send_json(
                     {
                         "bmp": info.to_dict(),
@@ -70,7 +81,7 @@ class AppHandler(BaseHTTPRequestHandler):
             if path == "/api/extract":
                 payload = self._read_json()
                 image = _decode_base64(payload.get("imageBase64"))
-                text_bytes, info = extract_text(image)
+                text_bytes, info = extract_bmp_text(image)
                 self._send_json(
                     {
                         "bmp": info.to_dict(),
@@ -80,8 +91,46 @@ class AppHandler(BaseHTTPRequestHandler):
                 )
                 return
 
+            if path == "/api/audio/analyze":
+                payload = self._read_json()
+                audio = _decode_base64(payload.get("audioBase64"))
+                info = inspect_wav(audio)
+                self._send_json({"wav": info.to_dict()})
+                return
+
+            if path == "/api/audio/hide":
+                payload = self._read_json()
+                audio = _decode_base64(payload.get("audioBase64"))
+                text = payload.get("text", "")
+                if not isinstance(text, str):
+                    raise ValueError("text must be a string")
+                text_bytes = text.encode("utf-8")
+                modified, info = hide_wav_text(audio, text_bytes)
+                self._send_json(
+                    {
+                        "wav": info.to_dict(),
+                        "textBytes": len(text_bytes),
+                        "filename": _output_audio_name(payload.get("filename")),
+                        "audioBase64": base64.b64encode(modified).decode("ascii"),
+                    }
+                )
+                return
+
+            if path == "/api/audio/extract":
+                payload = self._read_json()
+                audio = _decode_base64(payload.get("audioBase64"))
+                text_bytes, info = extract_wav_text(audio)
+                self._send_json(
+                    {
+                        "wav": info.to_dict(),
+                        "textBytes": len(text_bytes),
+                        "text": text_bytes.decode("utf-8", errors="replace"),
+                    }
+                )
+                return
+
             self._send_json({"error": "not found"}, status=404)
-        except (BmpError, StegoError, ValueError, json.JSONDecodeError) as exc:
+        except (BmpError, WavError, StegoError, ValueError, json.JSONDecodeError) as exc:
             self._send_json({"error": str(exc)}, status=400)
 
     def log_message(self, fmt: str, *args: object) -> None:
@@ -143,3 +192,10 @@ def _output_name(filename: object) -> str:
         return "stego-output.bmp"
     name = Path(filename).stem
     return f"{name}-stego.bmp"
+
+
+def _output_audio_name(filename: object) -> str:
+    if not isinstance(filename, str) or not filename.strip():
+        return "stego-output.wav"
+    name = Path(filename).stem
+    return f"{name}-stego.wav"
