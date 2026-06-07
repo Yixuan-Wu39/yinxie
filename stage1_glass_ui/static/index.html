@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>多媒体隐写 - 玻璃拟态版</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <main class="app-shell">
+      <header class="hero glass-panel">
+        <div>
+          <p class="eyebrow">阶段 1 / 玻璃拟态</p>
+          <h1>多媒体隐写工作台</h1>
+          <p class="hero-copy">图片支持 JPG、BMP、PNG 输入并输出 PNG；音频支持 WAV、MP3 输入并输出 WAV。</p>
+        </div>
+        <span id="server-status" class="status-pill">检查服务中</span>
+      </header>
+
+      <section class="workspace-grid">
+        <article class="tool-card glass-panel">
+          <div class="section-title">
+            <span class="step-badge">01</span>
+            <h2>图片隐写</h2>
+          </div>
+          <label class="file-zone">
+            <input id="source-image" type="file" accept=".jpg,.jpeg,.bmp,.png,image/jpeg,image/bmp,image/png" />
+            <span>选择 JPG、BMP 或 PNG 图片</span>
+          </label>
+          <div id="image-report" class="report muted">还没有选择图片。</div>
+
+          <textarea id="secret-text" rows="7" placeholder="输入要隐藏到图片里的文本"></textarea>
+          <div class="row">
+            <span id="text-counter" class="muted">0 字节</span>
+            <button id="hide-button" type="button" disabled>生成 PNG</button>
+          </div>
+
+          <div id="output-report" class="report muted">处理完成后会在这里出现下载按钮。</div>
+          <a id="download-link" class="button-link hidden" download>下载隐写 PNG</a>
+        </article>
+
+        <article class="tool-card glass-panel">
+          <div class="section-title">
+            <span class="step-badge">02</span>
+            <h2>图片提取</h2>
+          </div>
+          <label class="file-zone">
+            <input id="extract-image" type="file" accept=".png,image/png" />
+            <span>选择已经处理过的 PNG 图片</span>
+          </label>
+          <button id="extract-button" type="button" disabled>提取隐藏文本</button>
+          <pre id="extract-result" class="result-box">还没有提取结果。</pre>
+        </article>
+
+        <article class="tool-card glass-panel">
+          <div class="section-title">
+            <span class="step-badge">03</span>
+            <h2>音频隐写</h2>
+          </div>
+          <label class="file-zone">
+            <input id="audio-file" type="file" accept=".wav,.mp3,audio/wav,audio/x-wav,audio/mpeg" />
+            <span>选择 WAV 或 MP3 音频。MP3 会先转为 WAV 再隐写。</span>
+          </label>
+          <div id="audio-report" class="report muted">还没有选择音频。</div>
+
+          <textarea id="audio-secret-text" rows="6" placeholder="输入要隐藏到音频里的文本"></textarea>
+          <div class="row">
+            <span id="audio-text-counter" class="muted">0 字节</span>
+            <button id="audio-hide-button" type="button" disabled>生成 WAV</button>
+          </div>
+
+          <div id="audio-output-report" class="report muted">处理完成后会在这里出现下载按钮。</div>
+          <a id="audio-download-link" class="button-link hidden" download>下载隐写 WAV</a>
+        </article>
+
+        <article class="tool-card glass-panel">
+          <div class="section-title">
+            <span class="step-badge">04</span>
+            <h2>音频提取</h2>
+          </div>
+          <label class="file-zone">
+            <input id="audio-extract-file" type="file" accept=".wav,audio/wav,audio/x-wav" />
+            <span>选择已经处理过的 WAV 音频</span>
+          </label>
+          <button id="audio-extract-button" type="button" disabled>提取隐藏文本</button>
+          <pre id="audio-extract-result" class="result-box">还没有提取结果。</pre>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+name: Update Audio Recommendation
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions cron uses UTC. 06:17 UTC is 14:17 in China and avoids
+    # the busiest top-of-hour schedule window.
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-audio-recommendation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch Apple Music preview
+        run: python stage2_particle_ui/scripts/fetch_audio_recommendation.py
+
+      - name: Commit updated audio recommendation
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update audio recommendation
+          file_pattern: stage2_particle_ui/static/data/audio_recommendation.json stage2_particle_ui/static/data/audio_recommendation.*

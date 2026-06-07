@@ -1,0 +1,35 @@
+name: Update NASA APOD
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions cron uses UTC. 05:30 UTC is after midnight Eastern
+    # in both daylight-saving and standard time, so the day's APOD is available.
+    - cron: "30 5 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-nasa-apod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch NASA APOD
+        env:
+          NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+        run: python stage2_particle_ui/scripts/fetch_nasa_apod.py
+
+      - name: Commit updated APOD data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update NASA APOD recommendation
+          file_pattern: stage2_particle_ui/static/data/nasa_apod.json stage2_particle_ui/static/data/nasa_apod_image.*

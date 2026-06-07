@@ -145,10 +145,10 @@ python run_server.py --port 8010
 python -m unittest discover -s tests
 ```
 
-项目附带一个测试 WAV：
+项目附带一段原创旋律测试 WAV：
 
 ```text
-samples/test-tone.wav
+samples/test-melody.wav
 ```
 
 ## 后续迭代建议

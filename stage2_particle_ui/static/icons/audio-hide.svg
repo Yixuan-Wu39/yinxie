@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">音频隐写</title>
+  <desc id="desc">音频与文字合成输出音频。</desc>
+  <defs>
+    <linearGradient id="bg" x1="48" y1="36" x2="464" y2="476" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".36"/>
+      <stop offset=".62" stop-color="#dff5ff" stop-opacity=".24"/>
+      <stop offset="1" stop-color="#c7f7ec" stop-opacity=".18"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="9" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M2 2 L12 7 L2 12 Z" fill="#007aff"/>
+    </marker>
+    <filter id="shadow" x="-18%" y="-18%" width="136%" height="136%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#2b5f96" flood-opacity=".17"/>
+    </filter>
+    <symbol id="audioToken" viewBox="0 0 80 80">
+      <rect x="6" y="6" width="68" height="68" rx="18" fill="#fff" fill-opacity=".72" stroke="#fff" stroke-opacity=".94"/>
+      <path d="M44 20 V50 C44 62 34 68 24 64 C14 60 16 50 28 46 C34 44 40 44 44 48" fill="none" stroke="#007aff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M44 20 H62" fill="none" stroke="#007aff" stroke-width="7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="textToken" viewBox="0 0 80 80">
+      <rect x="6" y="6" width="68" height="68" rx="18" fill="#fff" fill-opacity=".72" stroke="#fff" stroke-opacity=".94"/>
+      <text x="40" y="47" font-family="Arial, sans-serif" font-size="19" font-weight="900" text-anchor="middle" fill="#007aff">ABC</text>
+    </symbol>
+  </defs>
+
+  <rect x="28" y="28" width="456" height="456" rx="44" fill="url(#bg)" stroke="#fff" stroke-opacity=".52"/>
+  <path d="M64 116 C170 62 300 72 448 164" fill="none" stroke="#fff" stroke-width="2" stroke-opacity=".36"/>
+  <path d="M66 392 C180 314 306 444 452 334" fill="none" stroke="#007aff" stroke-width="2" stroke-opacity=".08"/>
+
+  <g filter="url(#shadow)">
+    <use href="#audioToken" x="72" y="118" width="96" height="96"/>
+    <use href="#textToken" x="72" y="298" width="96" height="96"/>
+    <use href="#audioToken" x="360" y="208" width="96" height="96"/>
+  </g>
+
+  <path d="M168 166 C206 172 236 206 266 244" fill="none" stroke="#007aff" stroke-width="9" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M168 346 C210 334 238 294 266 268" fill="none" stroke="#007aff" stroke-width="9" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M278 256 C310 256 332 256 360 256" fill="none" stroke="#007aff" stroke-width="9" stroke-linecap="round" marker-end="url(#arrow)"/>
+</svg>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>多媒体隐写迭代版</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>多媒体隐写迭代版</h1>
+          <p>图片：JPG / BMP / PNG 输入，PNG 输出。音频：WAV / MP3 输入，WAV 输出。</p>
+        </div>
+        <span id="server-status" class="status-pill">检查服务中</span>
+      </header>
+
+      <section class="panel">
+        <h2>1. 输入图片并识别容量</h2>
+        <label class="file-zone">
+          <input id="source-image" type="file" accept=".jpg,.jpeg,.bmp,.png,image/jpeg,image/bmp,image/png" />
+          <span>选择 JPG、BMP 或 PNG 图片</span>
+        </label>
+        <div id="image-report" class="report muted">还没有选择图片。</div>
+      </section>
+
+      <section class="panel">
+        <h2>2. 输入要隐藏的文本</h2>
+        <textarea id="secret-text" rows="8" placeholder="在这里输入要藏进图片里的文本"></textarea>
+        <div class="row">
+          <span id="text-counter" class="muted">0 字节</span>
+          <button id="hide-button" type="button" disabled>生成 PNG</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>3. 输出 PNG</h2>
+        <div id="output-report" class="report muted">处理完成后会在这里出现下载按钮。</div>
+        <a id="download-link" class="button-link hidden" download>下载隐写 PNG</a>
+      </section>
+
+      <section class="panel">
+        <h2>4. 验证提取</h2>
+        <label class="file-zone">
+          <input id="extract-image" type="file" accept=".png,image/png" />
+          <span>选择已经处理过的 PNG 图片</span>
+        </label>
+        <button id="extract-button" type="button" disabled>提取隐藏文本</button>
+        <pre id="extract-result" class="result-box">还没有提取结果。</pre>
+      </section>
+
+      <section class="panel">
+        <h2>5. 输入音频并识别容量</h2>
+        <label class="file-zone">
+          <input id="audio-file" type="file" accept=".wav,.mp3,audio/wav,audio/x-wav,audio/mpeg" />
+          <span>选择 WAV 或 MP3 音频。MP3 会先转为 WAV 再隐写。</span>
+        </label>
+        <div id="audio-report" class="report muted">还没有选择音频。</div>
+      </section>
+
+      <section class="panel">
+        <h2>6. 输入要隐藏到音频里的文本</h2>
+        <textarea id="audio-secret-text" rows="6" placeholder="在这里输入要藏进音频里的文本"></textarea>
+        <div class="row">
+          <span id="audio-text-counter" class="muted">0 字节</span>
+          <button id="audio-hide-button" type="button" disabled>生成 WAV</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>7. 输出 WAV</h2>
+        <div id="audio-output-report" class="report muted">处理完成后会在这里出现下载按钮。</div>
+        <a id="audio-download-link" class="button-link hidden" download>下载隐写 WAV</a>
+      </section>
+
+      <section class="panel">
+        <h2>8. 验证音频提取</h2>
+        <label class="file-zone">
+          <input id="audio-extract-file" type="file" accept=".wav,audio/wav,audio/x-wav" />
+          <span>选择已经处理过的 WAV 音频</span>
+        </label>
+        <button id="audio-extract-button" type="button" disabled>提取隐藏文本</button>
+        <pre id="audio-extract-result" class="result-box">还没有提取结果。</pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

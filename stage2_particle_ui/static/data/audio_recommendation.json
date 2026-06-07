@@ -1,0 +1,23 @@
+{
+  "status": "ready",
+  "source": "Apple Music / iTunes preview",
+  "sourceUrl": "https://music.apple.com/cn/album/%E7%8E%BB%E7%92%83/6769327003?i=6769327013",
+  "apiUrl": "https://rss.marketingtools.apple.com/api/v2/cn/music/most-played/10/songs.json",
+  "selectionPolicy": "每天抓取 Apple Music 国区热门歌曲榜，选择榜单中第一个可用 30 秒试听片段；只缓存试听片段，不缓存完整歌曲。",
+  "date": "2026-06-07",
+  "chartName": "热门歌曲排行",
+  "chartCountry": "CN",
+  "chartRank": 1,
+  "title": "玻璃",
+  "artist": "Gareth.T",
+  "album": "玻璃 - Single",
+  "license": "试听片段版权归唱片方所有",
+  "durationSeconds": 30.0,
+  "mimeType": "audio/x-m4p",
+  "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/da/91/54/da9154c7-6462-cb68-5851-fd901ec06404/mzaf_594024198387560560.plus.aac.p.m4a",
+  "cachedAudioUrl": "/static/data/audio_recommendation.m4a",
+  "cachedFilename": "audio_recommendation.m4a",
+  "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1c/1a/be/1c1abe3a-2eb6-216c-9040-797bb98464d1/827568024145.jpg/600x600bb.jpg",
+  "description": "来自 Apple Music 国区热门歌曲榜的 30 秒试听片段，适合现场播放和音频隐写测试。",
+  "fetchedAt": "2026-06-07T14:39:41Z"
+}
