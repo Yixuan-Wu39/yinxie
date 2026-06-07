@@ -24,10 +24,10 @@ jobs:
           python-version: "3.11"
 
       - name: Fetch Apple Music preview
-        run: python stage2_particle_ui/scripts/fetch_audio_recommendation.py
+        run: python scripts/fetch_audio_recommendation.py
 
       - name: Commit updated audio recommendation
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update audio recommendation
-          file_pattern: stage2_particle_ui/static/data/audio_recommendation.json stage2_particle_ui/static/data/audio_recommendation.*
+          file_pattern: static/data/audio_recommendation.json static/data/audio_recommendation.*

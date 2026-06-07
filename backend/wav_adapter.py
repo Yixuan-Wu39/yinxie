@@ -1,4 +1,4 @@
-"""WAV adapter for the format-agnostic LSB steganography core."""
+"""WAV adapter for LSB audio steganography."""
 
 from __future__ import annotations
 
@@ -30,65 +30,58 @@ class WavInfo:
 
 
 def inspect_wav(audio: bytes | bytearray) -> WavInfo:
-    """Parse an uncompressed PCM WAV and return available LSB slots."""
     if len(audio) < 44:
-        raise WavError("file is too small to be a WAV audio file")
+        raise WavError("文件太小，不是有效的 WAV 音频")
     if audio[0:4] != b"RIFF" or audio[8:12] != b"WAVE":
-        raise WavError("only WAV files are supported in this version")
+        raise WavError("WAV 模式只支持 WAV 音频")
 
     fmt = None
     data_offset = None
     data_size = None
-
     cursor = 12
     while cursor + 8 <= len(audio):
         chunk_id = bytes(audio[cursor : cursor + 4])
         chunk_size = _u32(audio, cursor + 4)
-        chunk_data_start = cursor + 8
-        chunk_data_end = chunk_data_start + chunk_size
-        if chunk_data_end > len(audio):
-            raise WavError("WAV chunk data is incomplete")
+        chunk_start = cursor + 8
+        chunk_end = chunk_start + chunk_size
+        if chunk_end > len(audio):
+            raise WavError("WAV 数据块不完整")
 
         if chunk_id == b"fmt ":
             if chunk_size < 16:
-                raise WavError("WAV fmt chunk is too small")
+                raise WavError("WAV 格式信息块太小")
             fmt = {
-                "audio_format": _u16(audio, chunk_data_start),
-                "channels": _u16(audio, chunk_data_start + 2),
-                "sample_rate": _u32(audio, chunk_data_start + 4),
-                "byte_rate": _u32(audio, chunk_data_start + 8),
-                "block_align": _u16(audio, chunk_data_start + 12),
-                "bits_per_sample": _u16(audio, chunk_data_start + 14),
+                "audio_format": _u16(audio, chunk_start),
+                "channels": _u16(audio, chunk_start + 2),
+                "sample_rate": _u32(audio, chunk_start + 4),
+                "byte_rate": _u32(audio, chunk_start + 8),
+                "block_align": _u16(audio, chunk_start + 12),
+                "bits_per_sample": _u16(audio, chunk_start + 14),
             }
         elif chunk_id == b"data":
-            data_offset = chunk_data_start
+            data_offset = chunk_start
             data_size = chunk_size
 
-        cursor = chunk_data_end + (chunk_size % 2)
+        cursor = chunk_end + (chunk_size % 2)
 
     if fmt is None:
-        raise WavError("WAV fmt chunk was not found")
+        raise WavError("没有找到 WAV 格式信息块")
     if data_offset is None or data_size is None:
-        raise WavError("WAV data chunk was not found")
+        raise WavError("没有找到 WAV 音频数据块")
     if fmt["audio_format"] != 1:
-        raise WavError("only uncompressed PCM WAV audio is supported")
-    if fmt["channels"] <= 0:
-        raise WavError("invalid WAV channel count")
-    if fmt["sample_rate"] <= 0:
-        raise WavError("invalid WAV sample rate")
+        raise WavError("当前只支持未压缩 PCM WAV 音频")
     if fmt["bits_per_sample"] not in {8, 16, 24, 32}:
-        raise WavError("only 8-bit, 16-bit, 24-bit, or 32-bit PCM WAV is supported")
+        raise WavError("当前只支持 8、16、24 或 32 位 PCM WAV")
 
     bytes_per_sample = fmt["bits_per_sample"] // 8
     expected_block_align = fmt["channels"] * bytes_per_sample
     if fmt["block_align"] != expected_block_align:
-        raise WavError("unsupported WAV block alignment")
+        raise WavError("不支持这种 WAV 块对齐方式")
     if data_size % bytes_per_sample != 0:
-        raise WavError("WAV sample data is not aligned")
+        raise WavError("WAV 采样数据没有正确对齐")
 
     sample_slot_count = data_size // bytes_per_sample
     duration = data_size / fmt["byte_rate"] if fmt["byte_rate"] else 0
-
     return WavInfo(
         channels=fmt["channels"],
         sample_rate=fmt["sample_rate"],
@@ -105,7 +98,6 @@ def inspect_wav(audio: bytes | bytearray) -> WavInfo:
 
 
 def hide_text(audio: bytes, text: bytes) -> tuple[bytes, WavInfo]:
-    """Return a new WAV file with text embedded into sample low bytes."""
     info = inspect_wav(audio)
     modified = bytearray(audio)
     slots = _sample_low_byte_slots(info)
@@ -114,7 +106,6 @@ def hide_text(audio: bytes, text: bytes) -> tuple[bytes, WavInfo]:
 
 
 def extract_text(audio: bytes) -> tuple[bytes, WavInfo]:
-    """Return hidden text bytes from a supported WAV file."""
     info = inspect_wav(audio)
     slots = _sample_low_byte_slots(info)
     return _extract_with_slots(audio, slots, info.sample_slot_count), info
@@ -130,12 +121,12 @@ def _sample_low_byte_slots(info: WavInfo) -> range:
 def _embed_with_slots(audio: bytearray, slots: range, text: bytes) -> None:
     limit = stego_core.max_text_bytes(len(slots))
     if len(text) > limit:
-        raise WavError(f"text too long: {len(text)} bytes, max {limit} bytes")
+        raise WavError(f"文本过长：当前 {len(text)} 字节，上限 {limit} 字节")
 
     payload = stego_core.MAGIC + len(text).to_bytes(8, "little") + text
     required = stego_core.slots_required(len(payload))
     if required > len(slots):
-        raise WavError("audio does not have enough samples for payload")
+        raise WavError("音频采样数量不足，无法隐藏这段文本")
 
     slot_index = 0
     for value in payload:
@@ -148,7 +139,7 @@ def _embed_with_slots(audio: bytearray, slots: range, text: bytes) -> None:
 
 def _extract_with_slots(audio: bytes | bytearray, slots: range, slot_count: int) -> bytes:
     if slot_count < stego_core.slots_required(stego_core.HEADER_SIZE):
-        raise WavError("audio is too short to contain hidden text")
+        raise WavError("音频太短，不可能包含隐藏文本")
 
     slot_index = 0
     magic = bytearray()
@@ -156,7 +147,7 @@ def _extract_with_slots(audio: bytes | bytearray, slots: range, slot_count: int)
         value, slot_index = _read_byte_from_slots(audio, slots, slot_index)
         magic.append(value)
     if bytes(magic) != stego_core.MAGIC:
-        raise WavError("no hidden text marker found")
+        raise WavError("没有找到隐藏文本标记")
 
     length_bytes = bytearray()
     for _ in range(8):
@@ -166,7 +157,7 @@ def _extract_with_slots(audio: bytes | bytearray, slots: range, slot_count: int)
 
     limit = stego_core.max_text_bytes(slot_count)
     if text_length > limit:
-        raise WavError("hidden text length is invalid or corrupted")
+        raise WavError("隐藏文本长度异常，音频可能已损坏或被重新编码")
 
     text = bytearray()
     for _ in range(text_length):

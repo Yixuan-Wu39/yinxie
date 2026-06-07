@@ -1,1 +1,1 @@
-"""BMP-only steganography backend package."""
+"""Iteration 2 backend: JPG/BMP/PNG input, PNG output."""

@@ -1,4 +1,4 @@
-"""Small standard-library HTTP server for the BMP steganography prototype."""
+"""HTTP server for the iteration 2 PNG-output image steganography prototype."""
 
 from __future__ import annotations
 
@@ -9,24 +9,25 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from .bmp_adapter import (
-    BmpError,
-    extract_text as extract_bmp_text,
-    hide_text as hide_bmp_text,
-    inspect_bmp,
+from .audio_adapter import (
+    AudioAdapterError,
+    extract_text as extract_audio_text,
+    hide_text as hide_audio_text,
+    inspect_audio,
+)
+from .crypto_core import CryptoError, decrypt_text, encrypt_text, normalize_shift
+from .image_adapter import (
+    ImageAdapterError,
+    extract_text as extract_image_text,
+    hide_text as hide_image_text,
+    inspect_image,
 )
 from .stego_core import StegoError
-from .wav_adapter import (
-    WavError,
-    extract_text as extract_wav_text,
-    hide_text as hide_wav_text,
-    inspect_wav,
-)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_DIR = ROOT / "static"
-MAX_JSON_BYTES = 40 * 1024 * 1024
+MAX_JSON_BYTES = 80 * 1024 * 1024
 
 
 class AppHandler(BaseHTTPRequestHandler):
@@ -35,7 +36,7 @@ class AppHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path == "/api/health":
-            self._send_json({"ok": True})
+            self._send_json({"ok": True, "version": "stage2-particle-ui"})
             return
         if path in {"", "/"}:
             self._send_file(STATIC_DIR / "index.html")
@@ -44,72 +45,79 @@ class AppHandler(BaseHTTPRequestHandler):
             rel = unquote(path.removeprefix("/static/"))
             target = (STATIC_DIR / rel).resolve()
             if STATIC_DIR.resolve() not in target.parents:
-                self._send_json({"error": "invalid static path"}, status=400)
+                self._send_json({"error": "静态资源路径无效"}, status=400)
                 return
             self._send_file(target)
             return
-        self._send_json({"error": "not found"}, status=404)
+        self._send_json({"error": "没有找到这个页面或接口"}, status=404)
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
         try:
-            if path == "/api/analyze":
+            if path == "/api/image/analyze":
                 payload = self._read_json()
                 image = _decode_base64(payload.get("imageBase64"))
-                info = inspect_bmp(image)
-                self._send_json({"bmp": info.to_dict()})
+                info = inspect_image(image)
+                self._send_json({"image": info.to_dict()})
                 return
 
-            if path == "/api/hide":
+            if path == "/api/image/hide":
                 payload = self._read_json()
                 image = _decode_base64(payload.get("imageBase64"))
                 text = payload.get("text", "")
                 if not isinstance(text, str):
-                    raise ValueError("text must be a string")
-                text_bytes = text.encode("utf-8")
-                modified, info = hide_bmp_text(image, text_bytes)
+                    raise ValueError("文本内容必须是字符串")
+                shift = normalize_shift(payload.get("shift", 0))
+                text_bytes = encrypt_text(text, shift)
+                modified, info = hide_image_text(image, text_bytes)
                 self._send_json(
                     {
-                        "bmp": info.to_dict(),
+                        "image": info.to_dict(),
                         "textBytes": len(text_bytes),
+                        "shift": shift,
                         "filename": _output_name(payload.get("filename")),
                         "imageBase64": base64.b64encode(modified).decode("ascii"),
                     }
                 )
                 return
 
-            if path == "/api/extract":
+            if path == "/api/image/extract":
                 payload = self._read_json()
                 image = _decode_base64(payload.get("imageBase64"))
-                text_bytes, info = extract_bmp_text(image)
+                shift = normalize_shift(payload.get("shift", 0))
+                text_bytes, info = extract_image_text(image)
+                text = decrypt_text(text_bytes, shift)
                 self._send_json(
                     {
-                        "bmp": info.to_dict(),
+                        "image": info.to_dict(),
                         "textBytes": len(text_bytes),
-                        "text": text_bytes.decode("utf-8", errors="replace"),
+                        "shift": shift,
+                        "text": text,
                     }
                 )
                 return
 
             if path == "/api/audio/analyze":
                 payload = self._read_json()
-                audio = _decode_base64(payload.get("audioBase64"))
-                info = inspect_wav(audio)
-                self._send_json({"wav": info.to_dict()})
+                audio = _decode_base64(payload.get("audioBase64"), "audioBase64")
+                info = inspect_audio(audio)
+                self._send_json({"audio": info.to_dict()})
                 return
 
             if path == "/api/audio/hide":
                 payload = self._read_json()
-                audio = _decode_base64(payload.get("audioBase64"))
+                audio = _decode_base64(payload.get("audioBase64"), "audioBase64")
                 text = payload.get("text", "")
                 if not isinstance(text, str):
-                    raise ValueError("text must be a string")
-                text_bytes = text.encode("utf-8")
-                modified, info = hide_wav_text(audio, text_bytes)
+                    raise ValueError("文本内容必须是字符串")
+                shift = normalize_shift(payload.get("shift", 0))
+                text_bytes = encrypt_text(text, shift)
+                modified, info = hide_audio_text(audio, text_bytes)
                 self._send_json(
                     {
-                        "wav": info.to_dict(),
+                        "audio": info.to_dict(),
                         "textBytes": len(text_bytes),
+                        "shift": shift,
                         "filename": _output_audio_name(payload.get("filename")),
                         "audioBase64": base64.b64encode(modified).decode("ascii"),
                     }
@@ -118,34 +126,37 @@ class AppHandler(BaseHTTPRequestHandler):
 
             if path == "/api/audio/extract":
                 payload = self._read_json()
-                audio = _decode_base64(payload.get("audioBase64"))
-                text_bytes, info = extract_wav_text(audio)
+                audio = _decode_base64(payload.get("audioBase64"), "audioBase64")
+                shift = normalize_shift(payload.get("shift", 0))
+                text_bytes, info = extract_audio_text(audio)
+                text = decrypt_text(text_bytes, shift)
                 self._send_json(
                     {
-                        "wav": info.to_dict(),
+                        "audio": info.to_dict(),
                         "textBytes": len(text_bytes),
-                        "text": text_bytes.decode("utf-8", errors="replace"),
+                        "shift": shift,
+                        "text": text,
                     }
                 )
                 return
 
-            self._send_json({"error": "not found"}, status=404)
-        except (BmpError, WavError, StegoError, ValueError, json.JSONDecodeError) as exc:
+            self._send_json({"error": "没有找到这个接口"}, status=404)
+        except (AudioAdapterError, CryptoError, ImageAdapterError, StegoError, ValueError, json.JSONDecodeError) as exc:
             self._send_json({"error": str(exc)}, status=400)
 
     def log_message(self, fmt: str, *args: object) -> None:
-        print(f"[server] {self.address_string()} - {fmt % args}")
+        print(f"[多媒体隐写] {self.address_string()} - {fmt % args}")
 
     def _read_json(self) -> dict:
         length = int(self.headers.get("Content-Length", "0"))
         if length <= 0:
-            raise ValueError("empty request body")
+            raise ValueError("请求内容为空")
         if length > MAX_JSON_BYTES:
-            raise ValueError("request body is too large")
+            raise ValueError("上传内容太大")
         raw = self.rfile.read(length)
         payload = json.loads(raw.decode("utf-8"))
         if not isinstance(payload, dict):
-            raise ValueError("JSON body must be an object")
+            raise ValueError("请求格式不正确")
         return payload
 
     def _send_json(self, payload: dict, status: int = 200) -> None:
@@ -159,7 +170,7 @@ class AppHandler(BaseHTTPRequestHandler):
 
     def _send_file(self, path: Path) -> None:
         if not path.exists() or not path.is_file():
-            self._send_json({"error": "not found"}, status=404)
+            self._send_json({"error": "没有找到这个文件"}, status=404)
             return
         body = path.read_bytes()
         content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
@@ -170,32 +181,32 @@ class AppHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
 
-def run(host: str = "127.0.0.1", port: int = 8000) -> None:
+def run(host: str = "127.0.0.1", port: int = 8032) -> None:
     server = ThreadingHTTPServer((host, port), AppHandler)
-    print(f"BMP steganography server running at http://{host}:{port}")
+    print(f"阶段2粒子动态版已启动：http://{host}:{port}")
     server.serve_forever()
 
 
-def _decode_base64(value: object) -> bytes:
+def _decode_base64(value: object, field_name: str = "imageBase64") -> bytes:
     if not isinstance(value, str) or not value:
-        raise ValueError("imageBase64 is required")
+        label = "图片数据" if field_name == "imageBase64" else "音频数据"
+        raise ValueError(f"缺少{label}")
     if "," in value:
         value = value.split(",", 1)[1]
     try:
         return base64.b64decode(value, validate=True)
     except Exception as exc:
-        raise ValueError("invalid base64 image data") from exc
+        label = "图片数据" if field_name == "imageBase64" else "音频数据"
+        raise ValueError(f"{label}格式无效") from exc
 
 
 def _output_name(filename: object) -> str:
     if not isinstance(filename, str) or not filename.strip():
-        return "stego-output.bmp"
-    name = Path(filename).stem
-    return f"{name}-stego.bmp"
+        return "stego-output.png"
+    return f"{Path(filename).stem}-stego.png"
 
 
 def _output_audio_name(filename: object) -> str:
     if not isinstance(filename, str) or not filename.strip():
         return "stego-output.wav"
-    name = Path(filename).stem
-    return f"{name}-stego.wav"
+    return f"{Path(filename).stem}-stego.wav"

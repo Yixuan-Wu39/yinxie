@@ -26,10 +26,10 @@ jobs:
       - name: Fetch NASA APOD
         env:
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
-        run: python stage2_particle_ui/scripts/fetch_nasa_apod.py
+        run: python scripts/fetch_nasa_apod.py
 
       - name: Commit updated APOD data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update NASA APOD recommendation
-          file_pattern: stage2_particle_ui/static/data/nasa_apod.json stage2_particle_ui/static/data/nasa_apod_image.*
+          file_pattern: static/data/nasa_apod.json static/data/nasa_apod_image.*
