@@ -1,18 +1,17 @@
 {
-  "status": "ready",
+  "status": "not_image",
   "source": "NASA Astronomy Picture of the Day",
   "sourceUrl": "https://apod.nasa.gov/apod/astropix.html",
   "apiUrl": "https://api.nasa.gov/planetary/apod",
   "selectionPolicy": "APOD 每天只有一个官方推荐；如果当天不是图片，前端会提示暂不作为图片素材。",
-  "date": "2026-08-30",
-  "title": "M74: A Grand Design Spiral",
+  "date": "2026-08-31",
+  "title": "Launch of the Roman Space Telescope",
   "copyright": "NASA / Public domain where applicable",
-  "mediaType": "image",
-  "cacheSourceUrl": "https://apod.nasa.gov/apod/image/2608/m74_hst_960.jpg",
-  "imageUrl": "https://apod.nasa.gov/apod/image/2608/m74_hst_960.jpg",
-  "hdImageUrl": "https://apod.nasa.gov/apod/image/2608/m74_hst_1280.jpg",
-  "thumbnailUrl": null,
-  "explanation": "If not the most grand, then this spiral galaxy is at least one of the most photogenic.  An island universe of about 100 billion stars, 32 million light-years away toward the constellation Pisces, M74 presents a gorgeous face-on view.  Classified as an Sc galaxy, the grand design of M74's graceful spiral arms are traced by bright blue star clusters and dark cosmic dust lanes.  Constructed from archival images, this sharp composite is from the Hubble Space Telescope.  Spanning about 30,000 light-years across the face of M74, it includes exposures recording emission from hydrogen atoms, highlighting the reddish glow of the galaxy's large star-forming regions.   APOD's main NASA site is moving: From apod.nasa.gov to science.nasa.gov/apod",
-  "fetchedAt": "2026-08-30T10:34:45Z",
-  "cachedImageUrl": "/static/data/nasa_apod_image.jpg"
+  "mediaType": "video",
+  "cacheSourceUrl": "",
+  "imageUrl": "",
+  "hdImageUrl": null,
+  "thumbnailUrl": "",
+  "explanation": "A new telescope has been launched into space to study the universe. The Nancy Grace Roman Space Telescope (RST) has the same size main mirror as the Hubble Space Telescope (HST) but sees 100 times more sky during each snapshot.  This is possible because when compared to HST, RST's main mirror is more curved, its secondary mirror is closer, and its main camera is larger.  The result is that RST can inspect more of the sky more quickly, likely allowing, among other capabilities, the discovery of many more supernovas which tell us more about the expansion rate and composition of our universe, and many more planets orbiting other stars that tell us more about the possibilities for life elsewhere in the universe. RST will orbit the Sun, not the Earth, like the James Webb Space Telescope.  The featured video shows Roman being launched yesterday from Kennedy Space Center, Florida, USA aboard a SpaceX Falcon Heavy rocket.   APOD's main NASA site is moving: From apod.nasa.gov to science.nasa.gov/apod",
+  "fetchedAt": "2026-08-31T11:43:33Z"
 }
