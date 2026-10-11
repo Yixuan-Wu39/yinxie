@@ -4,7 +4,7 @@
   "sourceUrl": "https://apod.nasa.gov/apod/astropix.html",
   "apiUrl": "https://api.nasa.gov/planetary/apod",
   "selectionPolicy": "APOD 每天只有一个官方推荐；如果当天不是图片，前端会提示暂不作为图片素材。",
-  "date": "2026-10-10",
+  "date": "2026-10-11",
   "title": "NASA Science",
   "copyright": "NASA / Public domain where applicable",
   "mediaType": "image",
@@ -12,7 +12,7 @@
   "imageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "hdImageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "thumbnailUrl": null,
-  "explanation": "Tidally locked in synchronous rotation, the Moon always presents its familiar nearside to denizens of planet Earth. From lunar orbit, the Moon's farside can become familiar, though. In fact this sharp picture, a mosaic from the Lunar Reconnaissance Orbiter's wide angle camera, is centered on the lunar farside. Part of a global mosaic of over 15,000 images acquired between November 2009 and February 2011, the highest resolution version shows features at a scale of 100 meters per pixel. Surprisingly, the rough and battered surface of the farside looks very different from the nearside covered with smooth dark lunar maria. A likely explanation is that the farside crust is thicker, making it harder for molten material from the interior to flow to the surface and form dark, smooth maria.Tomorrow's picture: Sunday's Childe\t\t\t\t\t\t",
-  "fetchedAt": "2026-10-10T11:17:09Z",
+  "explanation": "Scientists are melting holes in the bottom of the world. In fact, almost 100 holes melted near the South Pole are now being used as an astronomical observatory. Astronomers with the IceCube Neutrino Observatory lowered a long string knotted with basketball-sized light detectors into each vertical lake. The water in each hole soon refreezes. The detectors attached to the strings are sensitive to blue light emitted in the surrounding clear ice. Such light results from fast-moving secondary particles liberated when high-energy neutrinos emitted by powerful processes out in the universe collide with ice molecules. IceCube has now detected many illuminating neutrinos. Pictured in 2010, one of the last of IceCube's detector strings is lowered into the freezing abyss, making IceCube the largest neutrino detector ever created. In recognition of unprecedented discoveries, it was announced earlier this week that a founding leader of the IceCube Collaboration will be awarded the Nobel Prize in Physics.Tomorrow's picture: Moons Planet\t\t\t\t\t\t",
+  "fetchedAt": "2026-10-11T11:30:54Z",
   "cachedImageUrl": "/static/data/nasa_apod_image.png"
 }
