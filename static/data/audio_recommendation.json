@@ -1,9 +1,9 @@
 {
-  "status": "ready",
+  "status": "stale",
   "source": "Apple Music / iTunes preview",
   "sourceUrl": "https://music.apple.com/cn/album/neon/6820428726?i=6820428730",
   "apiUrl": "https://rss.marketingtools.apple.com/api/v2/cn/music/most-played/10/songs.json",
-  "selectionPolicy": "每天抓取 Apple Music 国区热门歌曲榜，选择榜单中第一个可用 30 秒试听片段；只缓存试听片段，不缓存完整歌曲。",
+  "selectionPolicy": "本次音频推荐更新失败，保留上一段可用音频。",
   "date": "2026-10-17",
   "chartName": "热门歌曲排行",
   "chartCountry": "CN",
@@ -19,5 +19,6 @@
   "cachedFilename": "audio_recommendation.m4a",
   "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/9c/af/479caf36-9941-3b8e-51f5-98e761463502/888272190403_Cover.jpg/600x600bb.jpg",
   "description": "来自 Apple Music 国区热门歌曲榜的 30 秒试听片段，适合现场播放和音频隐写测试。",
-  "fetchedAt": "2026-10-17T10:36:52Z"
+  "fetchedAt": "2026-10-18T10:59:00Z",
+  "error": "Apple Music 榜单试听片段：The read operation timed out"
 }
