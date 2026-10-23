@@ -4,7 +4,7 @@
   "sourceUrl": "https://apod.nasa.gov/apod/astropix.html",
   "apiUrl": "https://api.nasa.gov/planetary/apod",
   "selectionPolicy": "APOD 每天只有一个官方推荐；如果当天不是图片，前端会提示暂不作为图片素材。",
-  "date": "2026-10-22",
+  "date": "2026-10-23",
   "title": "NASA Science",
   "copyright": "NASA / Public domain where applicable",
   "mediaType": "image",
@@ -12,7 +12,7 @@
   "imageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "hdImageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "thumbnailUrl": null,
-  "explanation": "Star light, star bright: is there a green star out tonight? Other than the Sun, all stars are so far from Earth that they appear as points in the sky. They are mostly white, but sometimes noticeably red or blue. This color typically relates to the temperature: blue stars are hotter than red stars. What about other colors? The featured image is an illustration showing WD J1330+6435, a white dwarf star, surrounded by an accretion disk with gas and rocks orbiting the star. White dwarfs are small, faint stars that are left over when a star like the Sun exhausts its nuclear fuel. Astronomers recently found that some white dwarf stars, despite their name, would appear yellow, green, cyan, pink, or purple. In these cases, trace elements that were accreted to these stars interact with the stellar atmosphere and shift its normally white color. But, alas! I wish I may, I wish I might, but they are too faint to see tonight...",
-  "fetchedAt": "2026-10-22T10:24:01Z",
+  "explanation": "Looking toward the north from Mullion, New South Wales, Australia, the Andromeda Galaxy never gets more than a few degrees above the horizon. During the southern hemisphere spring, Andromeda is highest in the sky around midnight though. And in this telephoto scene from October 10/11, multiple exposures were used to reveal the spiral galaxy in tantalizing detail as it climbed above rolling Australian hills. Also known as M31, the Andromeda Galaxy is one of the brightest objects in the Messier catalog, but is only visible to the unaided eye as a small, faint, fuzzy patch. Digitally tracked and stacked frames were combined with a foreground shot in the deep astro-image composite to reveal the galaxy's greater extent in planet Earth's night. In the springtime night skyscape,the closest large spiral galaxy spans nearly 6 full moons.Tomorrow's picture: pixels in space",
+  "fetchedAt": "2026-10-23T10:21:16Z",
   "cachedImageUrl": "/static/data/nasa_apod_image.png"
 }
