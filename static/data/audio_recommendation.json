@@ -4,7 +4,7 @@
   "sourceUrl": "https://music.apple.com/cn/album/neon/6820428726?i=6820428730",
   "apiUrl": "https://rss.marketingtools.apple.com/api/v2/cn/music/most-played/10/songs.json",
   "selectionPolicy": "每天抓取 Apple Music 国区热门歌曲榜，选择榜单中第一个可用 30 秒试听片段；只缓存试听片段，不缓存完整歌曲。",
-  "date": "2026-10-22",
+  "date": "2026-10-23",
   "chartName": "热门歌曲排行",
   "chartCountry": "CN",
   "chartRank": 1,
@@ -19,5 +19,5 @@
   "cachedFilename": "audio_recommendation.m4a",
   "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/9c/af/479caf36-9941-3b8e-51f5-98e761463502/888272190403_Cover.jpg/600x600bb.jpg",
   "description": "来自 Apple Music 国区热门歌曲榜的 30 秒试听片段，适合现场播放和音频隐写测试。",
-  "fetchedAt": "2026-10-22T11:45:14Z"
+  "fetchedAt": "2026-10-23T11:32:27Z"
 }
