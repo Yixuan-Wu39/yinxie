@@ -4,7 +4,7 @@
   "sourceUrl": "https://music.apple.com/cn/album/%E6%88%91%E4%B8%8D%E9%9A%BE%E8%BF%87/578524971?i=578524987",
   "apiUrl": "https://rss.marketingtools.apple.com/api/v2/cn/music/most-played/10/songs.json",
   "selectionPolicy": "每天抓取 Apple Music 国区热门歌曲榜，选择榜单中第一个可用 30 秒试听片段；只缓存试听片段，不缓存完整歌曲。",
-  "date": "2026-10-27",
+  "date": "2026-10-28",
   "chartName": "热门歌曲排行",
   "chartCountry": "CN",
   "chartRank": 1,
@@ -19,5 +19,5 @@
   "cachedFilename": "audio_recommendation.m4a",
   "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/89/94/5f/89945f98-114b-b665-926a-c1f547a07e88/825646522392.jpg/600x600bb.jpg",
   "description": "来自 Apple Music 国区热门歌曲榜的 30 秒试听片段，适合现场播放和音频隐写测试。",
-  "fetchedAt": "2026-10-27T12:04:32Z"
+  "fetchedAt": "2026-10-28T12:45:05Z"
 }
