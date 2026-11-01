@@ -4,7 +4,7 @@
   "sourceUrl": "https://apod.nasa.gov/apod/astropix.html",
   "apiUrl": "https://api.nasa.gov/planetary/apod",
   "selectionPolicy": "APOD 每天只有一个官方推荐；如果当天不是图片，前端会提示暂不作为图片素材。",
-  "date": "2026-10-31",
+  "date": "2026-11-01",
   "title": "NASA Science",
   "copyright": "NASA / Public domain where applicable",
   "mediaType": "image",
@@ -12,7 +12,7 @@
   "imageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "hdImageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "thumbnailUrl": null,
-  "explanation": "What spooky planet is this? Planet Earth on a dark and stormy night, of course. The ghostly scene was photographed at Hverir, a geothermally active area found along northeastern Iceland's volcanic landscape. Triggered by solar activity, geomagnetic storms have unleashed energetic particles trapped in Earth's magnetic field. Penetrating the planet's upper atmosphere at high latitudes, the particles create auroral displays in the starry night sky. Ghostly towers of steam and gas are venting from local fumaroles to dance against the eerie, greenish northern lights. For now, auroral activity on planet Earth remains in a high state as the Sun is only in early phases of decline from the peak of its solar activity cycle. And soon, other ghostly apparitions may dance in your neighborhood. Happy Halloween!Tomorrow's picture: Sunday's Childe",
-  "fetchedAt": "2026-10-31T11:01:35Z",
+  "explanation": "What color is the Moon? It depends on the night -- and the time. Outside of the Earth's atmosphere, the dark Moon, which shines by reflected sunlight, appears a magnificently brown-tinged gray. The featured image highlights a collection of apparent colors of the full moon on Earth, documented by one astrophotographer over 10 years from different locations across Italy. A red- or yellow-colored moon usually indicates a moon seen near the horizon. There, some of the blue light has been scattered away by a long path through the Earth's atmosphere, sometimes laden with fine dust. A blue-colored moon is more rare and can indicate an atmosphere carrying larger dust particles. What created the purple moon is unclear -- it may be a combination of several effects. The last image captures the total lunar eclipse of 2018 July -- where the moon, in Earth's shadow, appeared a faint red -- due to light refracted through air around the Earth. Have you ever seen an unusually colorful Moon?Tomorrow's picture: open space",
+  "fetchedAt": "2026-11-01T11:56:51Z",
   "cachedImageUrl": "/static/data/nasa_apod_image.png"
 }
