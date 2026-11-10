@@ -19,6 +19,6 @@
   "cachedFilename": "audio_recommendation.m4a",
   "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/0b/b2/81/0bb281a4-14af-a403-4af4-c39aa3f0d872/ticket.kusbehtm.jpg/600x600bb.jpg",
   "description": "来自 Apple Music 国区热门歌曲榜的 30 秒试听片段，适合现场播放和音频隐写测试。",
-  "fetchedAt": "2026-11-09T16:08:36Z",
-  "error": "Apple Music 榜单试听片段：The read operation timed out"
+  "fetchedAt": "2026-11-10T14:47:25Z",
+  "error": "Apple Music 榜单试听片段：HTTP Error 502: Bad Gateway"
 }
