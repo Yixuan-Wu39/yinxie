@@ -4,7 +4,7 @@
   "sourceUrl": "https://apod.nasa.gov/apod/astropix.html",
   "apiUrl": "https://api.nasa.gov/planetary/apod",
   "selectionPolicy": "APOD 每天只有一个官方推荐；如果当天不是图片，前端会提示暂不作为图片素材。",
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "title": "NASA Science",
   "copyright": "NASA / Public domain where applicable",
   "mediaType": "image",
@@ -12,7 +12,7 @@
   "imageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "hdImageUrl": "https://science.nasa.gov/wp-content/themes/nasa-child/assets/images/nasa-logo@2x.png",
   "thumbnailUrl": null,
-  "explanation": "Today's image could have been a painting. But what do these colors mean? The brightest star, left of the center, is blue Alnitak (the Girdle): a triple star system best known for being the easternmost star in Orion's Belt. The instantly recognizable shape of a dark horse's head at the center is the aptly named Horsehead Nebula. It is about five light-years tall and lies approximately 1,500 light-years away. It is made of dust and gas that obscure the red glow behind it, which is caused by hydrogen gas being ionized by the bright star Sigma Orionis at the top. The orange nebula with dark filaments on the left is the Flame Nebula. Closer to the Horsehead, the blue reflection nebula NGC 2023 is actively forming stars. The data for this \"painting\" were collected for almost six hours at the Utah Desert Remote Observatories, but the equipment was remotely controlled by the astrophotographer from his home, over 2,000 km away in Illinois.Tomorrow's picture: what's next?\t\t\t\t\t\t",
-  "fetchedAt": "2026-11-19T14:35:43Z",
+  "explanation": "On November 17, fans of interstellar spaceflight around planet Earth were invited to shine a message into the night sky. Traced by a flashlight beam switched on and off, the dashes and dots of a Morse code message captured in this time exposure from the Emirates Astronomical Observatory, are read V-G-R. That's a call sign for the Voyager 1 spacecraft currently in interstellar space some 26 billion kilometers away. How long did it take the message to reach humanity's most distant interstellar spacecraft? Traveling at the speed of light, the answer is one day. In fact, the Voyager 1 spacecraft was confirmed to reach its one light-day distance milestone on November 18, at 10:16:07 UTC, nearly 50 years after launch in 1977. For extra credit, fans of math can calculate that at one light-day per 50 years, Voyager 1 will reach its one light-year (365 light-days) distance milestone in about 18,250 years.Tomorrow's picture: pixels in space\t\t\t\t\t\t",
+  "fetchedAt": "2026-11-20T14:13:36Z",
   "cachedImageUrl": "/static/data/nasa_apod_image.png"
 }
